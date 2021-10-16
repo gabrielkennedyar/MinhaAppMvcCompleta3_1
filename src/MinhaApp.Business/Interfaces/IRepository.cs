@@ -9,7 +9,7 @@ namespace MinhaApp.Business.Interfaces
     public interface IRepository<TEntity> : IDisposable where TEntity : Entity
     {
         Task Adicionar(TEntity entity);
-        Task<TEntity> ObterPorId(params Guid[] id);
+        Task<TEntity> ObterPorId(Guid id);
         Task<List<TEntity>> ObterTodos();
         Task Atualizar(TEntity entity);
         Task Remover(Guid id);

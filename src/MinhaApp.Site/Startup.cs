@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MinhaApp.Business.Interfaces;
 using MinhaApp.Data.Context;
-using MinhaApp.Data.Reposioty;
+using MinhaApp.Data.Repository;
 using MinhaApp.Site.Data;
 using System;
 using System.Collections.Generic;
@@ -46,6 +46,8 @@ namespace MinhaApp.Site
             services.AddDbContext<MeuDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddControllersWithViews();
 

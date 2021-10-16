@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MinhaApp.Data.Reposioty
+namespace MinhaApp.Data.Repository
 {
     public class ProdutoRepository : Repository<Produto>, IProdutoRepository
     {

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace MinhaApp.Data.Reposioty
+namespace MinhaApp.Data.Repository
 {
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity, new()
     {
@@ -44,7 +44,7 @@ namespace MinhaApp.Data.Reposioty
             return await DbSet.AsNoTracking().Where(predicate).ToListAsync();
         }
 
-        public virtual async Task<TEntity> ObterPorId(params Guid[] id)
+        public virtual async Task<TEntity> ObterPorId(Guid id)
         {
             return await DbSet.FindAsync(id);
         }

@@ -5,7 +5,7 @@ using MinhaApp.Data.Context;
 using System;
 using System.Threading.Tasks;
 
-namespace MinhaApp.Data.Reposioty
+namespace MinhaApp.Data.Repository
 {
     public class EnderecoRepository : Repository<Endereco>, IEnderecoRepository
     {

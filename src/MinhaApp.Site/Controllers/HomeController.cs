@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MinhaApp.Business.Interfaces;
 using MinhaApp.Data.Context;
 using MinhaApp.Site.Models;
+using MinhaApp.Site.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,16 +16,16 @@ namespace MinhaApp.Site.Controllers
     public class HomeController : Controller
     {
         private readonly IFornecedorRepository _fornecedorRepository;
+        private readonly IMapper _mapper;
 
-        public HomeController(IFornecedorRepository fornecedorRepository)
+        public HomeController(IFornecedorRepository fornecedorRepository, IMapper mapper)
         {
             _fornecedorRepository = fornecedorRepository;
+            _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var teste = await _fornecedorRepository.ObterTodos();
-
             return View();
         }
 
