@@ -12,32 +12,32 @@ using MinhaApp.Site.ViewModels;
 
 namespace MinhaApp.Site.Controllers
 {
-    public class FornecedoresController : Controller
+    public class ProdutosController : Controller
     {
-        private readonly IFornecedorRepository _fornecedorRepository;
+        private readonly IProdutoRepository _produtoRepository;
         private readonly IMapper _mapper;
 
-        public FornecedoresController(IFornecedorRepository fornecedorRepository, IMapper mapper)
+        public ProdutosController(IProdutoRepository produtoRepository, IMapper mapper)
         {
-            _fornecedorRepository = fornecedorRepository;
+            _produtoRepository = produtoRepository;
             _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(_mapper.Map<List<FornecedorViewModel>>(await _fornecedorRepository.ObterTodos()));
+            return View(_mapper.Map<List<ProdutoViewModel>>(await _produtoRepository.ObterTodos()));
         }
 
         public async Task<IActionResult> Details(Guid id)
         {
-            var fornecedorViewModel = _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorEndereco(id));
+            var produtoViewModel = _mapper.Map<ProdutoViewModel>(await _produtoRepository.ObterPorId(id));
 
-            if (fornecedorViewModel == null)
+            if (produtoViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(fornecedorViewModel);
+            return View(produtoViewModel);
         }
 
         public IActionResult Create()
@@ -47,37 +47,37 @@ namespace MinhaApp.Site.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(FornecedorViewModel fornecedorViewModel)
+        public async Task<IActionResult> Create(ProdutoViewModel produtoViewModel)
         {
             if (ModelState.IsValid)
             {
-                fornecedorViewModel.Id = Guid.NewGuid();
+                produtoViewModel.Id = Guid.NewGuid();
 
                 // Vai mudar
-                await _fornecedorRepository.Adicionar(_mapper.Map<Fornecedor>(fornecedorViewModel));
+                await _produtoRepository.Adicionar(_mapper.Map<Produto>(produtoViewModel));
 
                 return RedirectToAction(nameof(Index));
             }
-            return View(fornecedorViewModel);
+            return View(produtoViewModel);
         }
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var fornecedorViewModel = _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterPorId(id));
+            var produtoViewModel = _mapper.Map<ProdutoViewModel>(await _produtoRepository.ObterPorId(id));
 
-            if (fornecedorViewModel == null)
+            if (produtoViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(fornecedorViewModel);
+            return View(produtoViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, FornecedorViewModel fornecedorViewModel)
+        public async Task<IActionResult> Edit(Guid id, ProdutoViewModel produtoViewModel)
         {
-            if (id != fornecedorViewModel.Id)
+            if (id != produtoViewModel.Id)
             {
                 return NotFound();
             }
@@ -86,11 +86,11 @@ namespace MinhaApp.Site.Controllers
             {
                 try
                 {
-                    await _fornecedorRepository.Atualizar(_mapper.Map<Fornecedor>(fornecedorViewModel));
+                    await _produtoRepository.Atualizar(_mapper.Map<Produto>(produtoViewModel));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await FornecedorExists(fornecedorViewModel.Id))
+                    if (!await ProdutoExists(produtoViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -101,33 +101,33 @@ namespace MinhaApp.Site.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(fornecedorViewModel);
+            return View(produtoViewModel);
         }
 
         public async Task<IActionResult> Delete(Guid id)
         {
-            var fornecedorViewModel = _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterPorId(id));
+            var produtoViewModel = _mapper.Map<ProdutoViewModel>(await _produtoRepository.ObterPorId(id));
 
-            if (fornecedorViewModel == null)
+            if (produtoViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(fornecedorViewModel);
+            return View(produtoViewModel);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _fornecedorRepository.Remover(id);
+            await _produtoRepository.Remover(id);
 
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task<bool> FornecedorExists(Guid id)
+        private async Task<bool> ProdutoExists(Guid id)
         {
-            return await _fornecedorRepository.ObterPorId(id) != null;
+            return await _produtoRepository.ObterPorId(id) != null;
         }
     }
 }
