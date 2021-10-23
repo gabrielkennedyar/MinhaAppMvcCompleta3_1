@@ -63,7 +63,7 @@ namespace MinhaApp.Site.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var fornecedorViewModel = _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterPorId(id));
+            var fornecedorViewModel = _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorProdutosEndereco(id));
 
             if (fornecedorViewModel == null)
             {
@@ -106,7 +106,7 @@ namespace MinhaApp.Site.Controllers
 
         public async Task<IActionResult> Delete(Guid id)
         {
-            var fornecedorViewModel = _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterPorId(id));
+            var fornecedorViewModel = _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorEndereco(id));
 
             if (fornecedorViewModel == null)
             {
@@ -123,6 +123,32 @@ namespace MinhaApp.Site.Controllers
             await _fornecedorRepository.Remover(id);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> AtualizarEndereco(Guid id)
+        {
+            var fornecedor = _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorEndereco(id));
+
+            if (fornecedor == null)
+            {
+                return NotFound();
+            }
+
+            return PartialView("_AtualizarEndereco", new FornecedorViewModel { Endereco = fornecedor.Endereco });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AtualizarEndereco(FornecedorViewModel fornecedorViewModel)
+        {
+            ModelState.Remove("Nome");
+            ModelState.Remove("Documento");
+
+            if (!ModelState.IsValid) return PartialView("_AtualizarEndereco", fornecedorViewModel);
+
+            await _fornecedorRepository.Atualizar(_mapper.Map<Fornecedor>(fornecedorViewModel));
+
+            var url = Url.Action("ObterEndereco", "Fornecedores", new { id = fornecedorViewModel.Endereco.FornecedorId });
+            return Json(new { success = true, url });
         }
 
         private async Task<bool> FornecedorExists(Guid id)

@@ -59,7 +59,9 @@
                     @Html.DisplayFor(model => model.Endereco.Estado)
                 </td>
                 <td>
-                    @* TODO: *@
+                    <a asp-action="AtualizarEndereco" asp-route-id="@Model.Id" class="btn btn-info" data-modal="">
+                        Editar
+                    </a>
                 </td>
             </tr>
         </table>
