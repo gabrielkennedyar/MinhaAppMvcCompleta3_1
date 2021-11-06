@@ -15,11 +15,16 @@ namespace MinhaApp.Site.Controllers
     public class FornecedoresController : Controller
     {
         private readonly IFornecedorRepository _fornecedorRepository;
+        private readonly IEnderecoRepository _enderecoRepository;
+        private readonly IFornecedorService _fornecedorService;
         private readonly IMapper _mapper;
 
-        public FornecedoresController(IFornecedorRepository fornecedorRepository, IMapper mapper)
+        public FornecedoresController(IFornecedorRepository fornecedorRepository, IEnderecoRepository enderecoRepository,
+            IFornecedorService fornecedorService, IMapper mapper)
         {
             _fornecedorRepository = fornecedorRepository;
+            _enderecoRepository = enderecoRepository;
+            _fornecedorService = fornecedorService;
             _mapper = mapper;
         }
 
@@ -54,7 +59,7 @@ namespace MinhaApp.Site.Controllers
                 fornecedorViewModel.Id = Guid.NewGuid();
 
                 // Vai mudar
-                await _fornecedorRepository.Adicionar(_mapper.Map<Fornecedor>(fornecedorViewModel));
+                await _fornecedorService.Adicionar(_mapper.Map<Fornecedor>(fornecedorViewModel));
 
                 return RedirectToAction(nameof(Index));
             }
@@ -86,7 +91,7 @@ namespace MinhaApp.Site.Controllers
             {
                 try
                 {
-                    await _fornecedorRepository.Atualizar(_mapper.Map<Fornecedor>(fornecedorViewModel));
+                    await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(fornecedorViewModel));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -125,6 +130,17 @@ namespace MinhaApp.Site.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> ObterEndereco(Guid id)
+        {
+            var fornecedor = _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorEndereco(id));
+            if (fornecedor == null)
+            {
+                return NotFound();
+            }
+
+            return PartialView("_DetalhesEndereco", fornecedor);
+        }
+
         public async Task<IActionResult> AtualizarEndereco(Guid id)
         {
             var fornecedor = _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorEndereco(id));
@@ -145,7 +161,7 @@ namespace MinhaApp.Site.Controllers
 
             if (!ModelState.IsValid) return PartialView("_AtualizarEndereco", fornecedorViewModel);
 
-            await _fornecedorRepository.Atualizar(_mapper.Map<Fornecedor>(fornecedorViewModel));
+            await _enderecoRepository.Atualizar(_mapper.Map<Endereco>(fornecedorViewModel.Endereco));
 
             var url = Url.Action("ObterEndereco", "Fornecedores", new { id = fornecedorViewModel.Endereco.FornecedorId });
             return Json(new { success = true, url });
