@@ -1,12 +1,11 @@
 ﻿@model MinhaApp.Site.ViewModels.ProdutoViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Novo Produto";
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"]</h1>
 
-<h4>Produto</h4>
 <hr />
 <div class="row">
     <div class="col-md-10">
@@ -16,7 +15,7 @@
 
             <div class="form-group">
                 <label asp-for="FornecedorId" class="control-label"></label>
-                <select asp-for="FornecedorId" class ="form-control" asp-items="@(new SelectList(Model.Fornecedores, "Id", "Nome"))">
+                <select asp-for="FornecedorId" class="form-control" asp-items="@(new SelectList(Model.Fornecedores, "Id", "Nome"))">
                     <option></option>
                 </select>
             </div>

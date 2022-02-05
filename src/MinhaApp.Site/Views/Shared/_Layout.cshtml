@@ -1,4 +1,7 @@
 ﻿@*@System.Globalization.CultureInfo.CurrentUICulture*@
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,6 +53,16 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="text/javascript">
+        var __APP =
+        {
+            Path: '@Context.Request.Path.Value',
+            PathBase = '@Context.Request.PathBase.Value',
+            AntiForgeryToken = '@Xsrf.GetAndStoreTokens(Context).RequestToken'
+        }
+    </script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
