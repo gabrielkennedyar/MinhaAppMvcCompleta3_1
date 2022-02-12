@@ -1,19 +1,18 @@
 ﻿using MinhaApp.Business.Interfaces;
 using MinhaApp.Business.Models;
+using MinhaApp.Business.Models.Validations;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MinhaApp.Business.Services
 {
-    public class FornecedorService : IFornecedorService
+    public class FornecedorService : BaseServices, IFornecedorService
     {
         private readonly IFornecedorRepository _fornecedorRepository;
         private readonly IEnderecoRepository _enderecoRepository;
 
-        public FornecedorService(IFornecedorRepository fornecedorRepository, IEnderecoRepository enderecoRepository)
+        public FornecedorService(IFornecedorRepository fornecedorRepository, IEnderecoRepository enderecoRepository, INotificador notificador) : base(notificador)
         {
             _fornecedorRepository = fornecedorRepository;
             _enderecoRepository = enderecoRepository;
@@ -21,11 +20,19 @@ namespace MinhaApp.Business.Services
 
         public async Task Adicionar(Fornecedor fornecedor)
         {
-            // TODO: Validar
+            if (!ExecutarValidacao(new FornecedorValidation(), fornecedor))
+            {
+                ExecutarValidacao(new EnderecoValidation(), fornecedor.Endereco);
+                return;
+            }
+            else if (!ExecutarValidacao(new EnderecoValidation(), fornecedor.Endereco))
+            {
+                return;
+            }
 
             if (_fornecedorRepository.Buscar(f => f.Documento == fornecedor.Documento).Result.Any())
             {
-                // TODO: Notificar Erro
+                Notificar("Já existe um fornecedor com este documento cadastrado.");
                 return;
             }
 
@@ -34,11 +41,11 @@ namespace MinhaApp.Business.Services
 
         public async Task Atualizar(Fornecedor fornecedor)
         {
-            // TODO: Validar
+            if (!ExecutarValidacao(new FornecedorValidation(), fornecedor)) return;
 
             if (_fornecedorRepository.Buscar(f => f.Documento == fornecedor.Documento && f.Id != fornecedor.Id).Result.Any())
             {
-                // TODO: Notificar Erro
+                Notificar("Já existe um fornecedor com este documento cadastrado.");
                 return;
             }
 
@@ -47,7 +54,7 @@ namespace MinhaApp.Business.Services
 
         public async Task AtualizarEndereco(Endereco endereco)
         {
-            // TODO: Validar
+            if (!ExecutarValidacao(new EnderecoValidation(), endereco)) return;
 
             await _enderecoRepository.Atualizar(endereco);
         }
@@ -56,7 +63,7 @@ namespace MinhaApp.Business.Services
         {
             if (_fornecedorRepository.ObterFornecedorProdutosEndereco(id).Result.Produtos.Any())
             {
-                // TODO: Notificar Erro
+                Notificar("O fornecedor possui produtos cadastrados.");
                 return;
             }
 

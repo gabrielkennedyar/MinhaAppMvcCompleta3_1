@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.Extensions.DependencyInjection;
 using MinhaApp.Business.Interfaces;
+using MinhaApp.Business.Notificacoes;
 using MinhaApp.Business.Services;
 using MinhaApp.Data.Context;
 using MinhaApp.Data.Repository;
@@ -17,6 +18,8 @@ namespace MinhaApp.Site.Configurations
             services.AddScoped<IFornecedorRepository, FornecedorRepository>();
             services.AddScoped<IEnderecoRepository, EnderecoRepository>();
 
+
+            services.AddScoped<INotificador, Notificador>();
             services.AddScoped<IProdutoService, ProdutoService>();
             services.AddScoped<IFornecedorService, FornecedorService>();
             services.AddSingleton<IValidationAttributeAdapterProvider, MoedaValidationAttributeAdapterProvider>();
