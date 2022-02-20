@@ -31,6 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Autenticacao\Data\" />
+    <Folder Include="Areas\Autenticacao\Models\" />
     <Folder Include="wwwroot\imagens\" />
   </ItemGroup>
 
