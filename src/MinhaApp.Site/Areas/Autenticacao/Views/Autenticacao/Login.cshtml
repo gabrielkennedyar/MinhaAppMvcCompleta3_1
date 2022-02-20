@@ -1,0 +1,35 @@
+﻿@model MinhaApp.Site.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Tela de Login usando Áreas!";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-10">
+        <form asp-action="Login">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Usuario" class="control-label"></label>
+                <input asp-for="Usuario" class="form-control" />
+                <span asp-validation-for="Usuario" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Senha" class="control-label"></label>
+                <input asp-for="Senha" class="form-control" />
+                <span asp-validation-for="Senha" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                <input type="submit" value="Logar" class="btn btn-primary" />
+                <a class="btn btn-info" >Voltar</a>
+            </div>
+
+        </form>
+    </div>
+</div>

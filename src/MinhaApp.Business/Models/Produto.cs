@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MinhaApp.Business.Models
 {
@@ -11,6 +12,7 @@ namespace MinhaApp.Business.Models
         public decimal Valor { get; private set; }
         public DateTime DataCadastro { get; private set; }
         public bool Ativo { get; private set; }
+        public ICollection<CategoriaProduto> CategoriaProdutos { get; set; }
 
         public Fornecedor Fornecedor { get; private set; }
 
